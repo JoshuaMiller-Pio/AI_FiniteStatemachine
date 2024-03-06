@@ -40,6 +40,7 @@ public class EnemyAgent : MonoBehaviour
         }
     }
 
+    //applies the idle state
     public void isIdle()
     {
         Debug.Log("idle");
@@ -55,6 +56,7 @@ public class EnemyAgent : MonoBehaviour
         
     }
 
+    //applies the chasing state
     public void isChasing()
     {
         
@@ -64,22 +66,23 @@ public class EnemyAgent : MonoBehaviour
             
         }
         Debug.Log("chasing");
-        if (DistanceToPlayer(agent.transform.position.x, player.transform.position.x,agent.transform.position.y, player.transform.position.y ) <= 3)
+        if (DistanceToPlayer(agent.transform.position.x, player.transform.position.x,agent.transform.position.y, player.transform.position.y ) <= 1.5f)
         {
             currentState = FiniteStateMachine.Attack;
         }
         
     }
-
+//applies the attacking state
     public void isAttacking()
     {
-        if (DistanceToPlayer(agent.transform.position.x, player.transform.position.x,agent.transform.position.y, player.transform.position.y ) > 3)
+        if (DistanceToPlayer(agent.transform.position.x, player.transform.position.x,agent.transform.position.y, player.transform.position.y ) > 1.4f)
         {
             currentState = FiniteStateMachine.Chase;
         }
         Debug.Log("attacking");
     }
 
+    //checks to see if player is within range and switches to chase mode
     private void OnTriggerEnter(Collider other)
     {
         
@@ -89,13 +92,14 @@ public class EnemyAgent : MonoBehaviour
             agent.SetDestination(player.gameObject.transform.position);
         }
     }
-
-
+    
+    //if player leaves switches to idle mode
     private void OnTriggerExit(Collider other)
     {
         currentState = FiniteStateMachine.Idle;
     }
 
+    //used to calculate the distance to the player
     private float DistanceToPlayer(float x1, float x2, float y1, float y2)
     {
         float distance = (float)Math.Sqrt(math.pow((x2-x1),2) + math.pow((y2-y1),2)) ;
